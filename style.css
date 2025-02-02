@@ -1,0 +1,34 @@
+body {
+    margin: 0;
+    height: 100vh;
+    background: #1a1a1a;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#ok-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ok {
+    position: absolute;
+    color: #00ff00;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    font-size: 24px;
+    text-shadow: 0 0 5px #00ff00;
+    user-select: none;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    to {
+        transform: translateY(100vh);
+    }
+}
