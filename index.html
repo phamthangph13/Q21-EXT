@@ -135,7 +135,7 @@
             errorElement.style.display = 'none';
 
             try {
-                const response = await fetch(`/api/Circle/${radius}`);
+                const response = await fetch(`http://localhost:5134/api/Circle/${radius}`);
                 if (!response.ok) {
                     throw new Error('API call failed');
                 }
