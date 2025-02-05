@@ -1,13 +1,157 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OK Rain Meme</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Tính Toán Hình Tròn</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #2d3748;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        button {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result-item {
+            margin: 0.5rem 0;
+            color: #2d3748;
+            font-size: 1.1rem;
+        }
+
+        .error {
+            color: #e53e3e;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <div id="ok-container"></div>
-    <script src="script.js"></script>
+    <div class="container">
+        <h1>Tính Toán Hình Tròn</h1>
+        <div class="input-group">
+            <label for="radius">Bán kính (r)</label>
+            <input type="number" id="radius" step="0.01" placeholder="Nhập bán kính...">
+            <div class="error" id="error">Bán kính phải lớn hơn 0</div>
+        </div>
+        <button onclick="calculateCircle()">Tính toán</button>
+        <div class="result" id="result">
+            <div class="result-item">Diện tích: <span id="dien_tich"></span></div>
+            <div class="result-item">Chu vi: <span id="chu_vi"></span></div>
+            <div class="result-item">Đường kính: <span id="duong_kinh"></span></div>
+        </div>
+    </div>
+
+    <script>
+        async function calculateCircle() {
+            const radius = parseFloat(document.getElementById('radius').value);
+            const errorElement = document.getElementById('error');
+            const resultElement = document.getElementById('result');
+
+            if (radius <= 0) {
+                errorElement.style.display = 'block';
+                resultElement.classList.remove('show');
+                return;
+            }
+
+            errorElement.style.display = 'none';
+
+            try {
+                const response = await fetch(`/api/Circle/${radius}`);
+                if (!response.ok) {
+                    throw new Error('API call failed');
+                }
+                const data = await response.json();
+
+                document.getElementById('dien_tich').textContent = data.dien_tich.toFixed(2);
+                document.getElementById('chu_vi').textContent = data.chu_vi.toFixed(2);
+                document.getElementById('duong_kinh').textContent = data.duong_kinh.toFixed(2);
+                resultElement.classList.add('show');
+            } catch (error) {
+                console.error('Error:', error);
+                errorElement.textContent = 'Có lỗi xảy ra khi tính toán';
+                errorElement.style.display = 'block';
+                resultElement.classList.remove('show');
+            }
+        }
+    </script>
 </body>
 </html>
